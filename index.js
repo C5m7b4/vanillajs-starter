@@ -42,8 +42,14 @@ const isValid = (v) => {
 
 const getTotal = () => {
   return filteredData.reduce((acc, cur) => {
-    return acc + cur.price;
+    return acc + +cur.price;
   }, 0);
+};
+
+const clearForm = () => {
+  Object.keys(state.currentItem).map((key) => {
+    document.getElementById(key).value = '';
+  });
 };
 
 // add a function to handle when our state changes
@@ -181,3 +187,52 @@ const displayMostExpensive = () => {
   parent.appendChild(div);
 };
 displayMostExpensive();
+
+// now we are going to introduce composition
+const findCategoryMostExpensiveItem = (array) => {
+  return array.reduce((acc, cur) => {
+    return acc.price > cur.price ? acc : cur;
+  }, 0);
+};
+
+// this is just an example function
+function pipe(...functions) {
+  return function (x) {
+    return functions.reduce((value, f) => f(value), x);
+  };
+}
+
+// this function will chain other functions to produce a final result
+const compose =
+  (...fns) =>
+  (...args) =>
+    fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
+
+const pipedFn = compose(
+  findCategoryMostExpensiveItem,
+  curriedFilter
+)('beverages');
+console.log('most expensive item in the beverages category');
+console.log(pipedFn);
+
+// now we need to create a select so the user can select a category for their new items
+const createSelect = () => {
+  const categories = data.unique('category');
+  let html =
+    '<select id="category" onChange="changeState(this)"><option value="0">Select a Category to filter</option>';
+  categories.map((c) => {
+    html += `<option value="${c}">${c}</option>`;
+  });
+  html += '</select>';
+  document.getElementById('category-holder').innerHTML = html;
+};
+
+createSelect();
+
+const saveItem = () => {
+  const copiedItems = [...state.items, state.currentItem];
+  state.items = copiedItems;
+  filteredData = copiedItems;
+  buildItemTable();
+  clearForm();
+};
