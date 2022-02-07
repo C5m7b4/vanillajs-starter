@@ -121,3 +121,16 @@ const deleteItem = (item) => {
     buildItemTable();
   }
 };
+
+// now lets add curry to the mix so we can do some dynamic filtering
+const filterData = (property) => {
+  return function (value) {
+    return data.filter((i) => i[property] == value);
+  };
+};
+
+const curriedFilter = filterData('category');
+fruits = curriedFilter('fruit');
+console.log('fruits', fruits);
+const bevs = curriedFilter('beverages');
+console.log('bevs', bevs);
