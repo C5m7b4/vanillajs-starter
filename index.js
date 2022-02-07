@@ -21,3 +21,14 @@ const data = [
   { id: 10, name: 'Snickers', price: 1.59, size: 'bar', category: 'candy' },
   { id: 11, name: 'Almond Joy', price: 1.69, size: 'bar', category: 'candy' },
 ];
+
+// first we are going to add some data that we can change
+const state = {
+  items: data,
+  currentItem: {
+    name: '',
+    size: '',
+    price: 0,
+    category: '',
+  },
+};
