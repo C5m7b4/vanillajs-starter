@@ -40,6 +40,12 @@ const isValid = (v) => {
   return false;
 };
 
+const getTotal = () => {
+  return filteredData.reduce((acc, cur) => {
+    return acc + cur.price;
+  }, 0);
+};
+
 // add a function to handle when our state changes
 // ie: this is triggered by the onChange event on the input boxes
 const changeState = (identifier) => {
@@ -66,11 +72,12 @@ const setValue = (identifier, value) => {
 
 // create a function that will build a table with our data
 const buildItemTable = () => {
-  let html = `<table style="width: 90%; margin: 20px auto; cell-padding: 2px;color: #000"><tr><th>Produce</th><th>Size</th><th>Price</th><th>Category</th><th>Delete</th></tr>`;
+  let html = `<table style="width: 90%; margin: 20px auto; cell-padding: 2px;color: #000"><tr><th>Product</th><th>Size</th><th>Price</th><th>Category</th><th>Delete</th></tr>`;
   filteredData.map((item) => {
     const { name, size, price, category } = item;
     html += `<tr><td>${name}</td><td>${size}</td><td>${price}</td><td>${category}</td><td style="cursor:pointer;" onClick=deleteItem(${item.id})>Trash</td></tr>`;
   });
+  html += `<tr><td></td><td></td><td>${getTotal()}</td><td></td><td></td></tr>`;
   html += '</table';
   document.getElementById('items').innerHTML = html;
 };
@@ -134,3 +141,43 @@ fruits = curriedFilter('fruit');
 console.log('fruits', fruits);
 const bevs = curriedFilter('beverages');
 console.log('bevs', bevs);
+
+// get the cheapest item and update the page
+const getCheapestItem = () => {
+  return filteredData.reduce((acc, cur) => {
+    if (acc.price < cur.price) {
+      return acc;
+    } else {
+      return cur;
+    }
+  }, 9999);
+};
+
+const displayCheapestItem = () => {
+  const cheapest = getCheapestItem();
+  const div = document.createElement('div');
+  const parent = document.getElementById('stats');
+  div.innerHTML = `The cheapest item is ${cheapest.name} and it costs ${cheapest.price}`;
+  parent.appendChild(div);
+};
+
+displayCheapestItem();
+
+const mostExpensive = () => {
+  return filteredData.reduce((acc, cur) => {
+    if (acc.price > cur.price) {
+      return acc;
+    } else {
+      return cur;
+    }
+  }, 0);
+};
+
+const displayMostExpensive = () => {
+  const highest = mostExpensive();
+  const div = document.createElement('div');
+  const parent = document.getElementById('stats');
+  div.innerHTML = `The most expensive item is ${highest.name} and it is ${highest.price}`;
+  parent.appendChild(div);
+};
+displayMostExpensive();
