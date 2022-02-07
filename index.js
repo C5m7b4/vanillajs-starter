@@ -62,3 +62,15 @@ const setValue = (identifier, value) => {
     document.getElementById(identifier).value = value;
   }
 };
+
+// create a function that will build a table with our data
+const buildItemTable = () => {
+  let html = `<table style="width: 100%; cell-padding: 2px;color: #000"><tr><th>Produce</th><th>Size</th><th>Price</th><th>Category</th><th>Delete</th></tr>`;
+  state.items.map((item) => {
+    const { name, size, price, category } = item;
+    html += `<tr><td>${name}</td><td>${size}</td><td>${price}</td><td>${category}</td><td style="cursor:pointer;" onClick=deleteItem(${item.id})>Trash</td></tr>`;
+  });
+  html += '</table';
+  document.getElementById('items').innerHTML = html;
+};
+buildItemTable();
