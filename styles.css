@@ -56,3 +56,32 @@ tr:nth-child(odd) {
 td {
   padding: 5px;
 }
+
+.btn {
+  padding: 6px 15px;
+  border-radius: 7px;
+  outline: none;
+  border: 0;
+  margin: 5px 12px;
+  cursor: pointer;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  background-color: rgb(151, 146, 146);
+  color: #fff;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+select {
+  padding: 7px 12px;
+  border-radius: 6px;
+  outline: none;
+  border: 0;
+  margin: 8px 15px;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.3);
+}
