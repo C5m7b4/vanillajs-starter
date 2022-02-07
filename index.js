@@ -32,3 +32,33 @@ const state = {
     category: '',
   },
 };
+
+// create a function to test for undefined or null
+const isValid = (v) => {
+  if (v !== 'undefined' && v !== null) return true;
+  return false;
+};
+
+// add a function to handle when our state changes
+// ie: this is triggered by the onChange event on the input boxes
+const changeState = (identifier) => {
+  const { id, value } = identifier;
+  setValue(id, value);
+  if (!isValid(id)) {
+    return;
+  }
+
+  return {
+    ...state,
+    currentItem: {
+      ...(state.currentItem[id] = value),
+    },
+  };
+};
+
+// this function will set the value back to the item in the document
+const setValue = (identifier, value) => {
+  if (isValid(value)) {
+    document.getElementById(identifier).value = value;
+  }
+};
