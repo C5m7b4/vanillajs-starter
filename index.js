@@ -3,10 +3,10 @@
 })();
 
 const data = [
-  { id: 1, name: 'apple', price: 0.99, size: 'each', category: 'fruit' },
+  { id: 1, name: 'apple lg', price: 0.99, size: 'each', category: 'fruit' },
   { id: 2, name: 'bananna', price: 1.1, size: 'each', category: 'fruit' },
   { id: 3, name: 'grapes', price: 1.99, size: 'bundle', category: 'fruit' },
-  { id: 4, name: 'apple', price: 0.89, size: 'each', category: 'fruit' },
+  { id: 4, name: 'apple sm', price: 0.89, size: 'each', category: 'fruit' },
   {
     id: 5,
     name: 'Dr. Pepper',
@@ -21,6 +21,7 @@ const data = [
   { id: 10, name: 'Snickers', price: 1.59, size: 'bar', category: 'candy' },
   { id: 11, name: 'Almond Joy', price: 1.69, size: 'bar', category: 'candy' },
 ];
+let filteredData = data;
 
 // first we are going to add some data that we can change
 const state = {
@@ -65,8 +66,8 @@ const setValue = (identifier, value) => {
 
 // create a function that will build a table with our data
 const buildItemTable = () => {
-  let html = `<table style="width: 100%; cell-padding: 2px;color: #000"><tr><th>Produce</th><th>Size</th><th>Price</th><th>Category</th><th>Delete</th></tr>`;
-  state.items.map((item) => {
+  let html = `<table style="width: 90%; margin: 20px auto; cell-padding: 2px;color: #000"><tr><th>Produce</th><th>Size</th><th>Price</th><th>Category</th><th>Delete</th></tr>`;
+  filteredData.map((item) => {
     const { name, size, price, category } = item;
     html += `<tr><td>${name}</td><td>${size}</td><td>${price}</td><td>${category}</td><td style="cursor:pointer;" onClick=deleteItem(${item.id})>Trash</td></tr>`;
   });
@@ -74,3 +75,37 @@ const buildItemTable = () => {
   document.getElementById('items').innerHTML = html;
 };
 buildItemTable();
+
+// add a new function to the arrays prototype that will allow us to get unique values
+Array.prototype.unique = function (field) {
+  const newArray = [];
+  this.forEach((record) => {
+    const { [field]: targetField } = record;
+    if (!newArray.includes(targetField)) {
+      newArray.push(targetField);
+    }
+  });
+
+  return newArray;
+};
+
+const buildFilterBox = () => {
+  const categories = data.unique('category');
+  let html =
+    '<select onChange={handleFilterChange(this)}><option value="0">Select a Category to filter</option>';
+  categories.map((c) => {
+    html += `<option value="${c}">${c}</option>`;
+  });
+  html += '</select>';
+  document.getElementById('filter').innerHTML = html;
+};
+buildFilterBox();
+
+const handleFilterChange = (e) => {
+  if (e.value == '0') {
+    filteredData = state.items;
+  } else {
+    filteredData = state.items.filter((d) => d.category == e.value);
+  }
+  buildItemTable();
+};
