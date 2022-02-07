@@ -109,3 +109,15 @@ const handleFilterChange = (e) => {
   }
   buildItemTable();
 };
+
+// now lets add the ability to delete an item
+const deleteItem = (item) => {
+  const itemIndex = state.items.findIndex((i) => i.id === item);
+  if (itemIndex) {
+    const copiedItems = Array.from(state.items);
+    copiedItems.splice(itemIndex, 1);
+    state.items = copiedItems;
+    filteredData = copiedItems;
+    buildItemTable();
+  }
+};
